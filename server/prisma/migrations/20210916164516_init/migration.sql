@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "customer" ADD COLUMN     "registeredAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
