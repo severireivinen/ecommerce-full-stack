@@ -3,16 +3,21 @@ import React from "react";
 import useLogin from "../hooks/useLogin";
 import { LoginField } from "../utils/types";
 import * as Yup from "yup";
-import { setAccessToken } from "../lib/accessToken";
+import { useRouter } from "next/router";
+import { useApolloClient } from "@apollo/client";
 
 const LoginForm = () => {
   const [login]: any = useLogin();
+  const router = useRouter();
+  const client = useApolloClient();
 
   const onSubmit = async (values: LoginField) => {
     const { email, password } = values;
 
     try {
       await login({ email, password });
+      client.resetStore();
+      router.push("/");
     } catch (e) {
       console.log(e);
     }

@@ -13,9 +13,8 @@ import {
 import argon2 from "argon2";
 import { AuthenticationError } from "apollo-server-errors";
 import { Context } from "../context";
-import { createRefreshToken, createAccessToken } from "../utils/auth";
+import { createAccessToken } from "../utils/auth";
 import { isAuth } from "../utils/isAuth";
-import { sendRefreshToken } from "../utils/sendRefreshToken";
 
 @InputType()
 class UserRegisterInput {
@@ -109,17 +108,20 @@ export class CustomerResolver {
       throw new AuthenticationError("Invalid email or password");
     }
 
+    const token = createAccessToken(customer);
+
     // Successful login
-    ctx.res.cookie("jid", createRefreshToken(customer), { httpOnly: false });
+    //ctx.res.cookie("jid", createRefreshToken(customer), { httpOnly: false });
+    ctx.res.cookie("jid", token, { httpOnly: false });
 
     return {
-      accessToken: createAccessToken(customer),
+      accessToken: token,
     };
   }
 
   @Mutation(() => Boolean)
   async logout(@Ctx() ctx: Context) {
-    sendRefreshToken(ctx.res, "");
+    ctx.res.cookie("jid", "", { httpOnly: false });
     return true;
   }
 }
