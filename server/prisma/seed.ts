@@ -2,7 +2,7 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const productData: Prisma.productCreateInput[] = [
+const productData: Prisma.ProductCreateInput[] = [
   {
     name: "Black T-Shirt",
     price: 5.99,

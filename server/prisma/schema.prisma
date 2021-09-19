@@ -10,16 +10,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model order {
-  id         Int       @id @default(autoincrement())
-  orderDate  DateTime  @default(now())
-  finishDate DateTime
-  products   product[]
-  customer   customer? @relation(fields: [customerId], references: [id])
-  customerId Int?
-}
-
-model customer {
+model Customer {
   id           Int      @id @default(autoincrement())
   email        String   @unique
   password     String
@@ -27,16 +18,33 @@ model customer {
   firstName    String
   lastName     String
   registeredAt DateTime @default(now())
-  orders       order[]
+  cart         Cart     @relation(fields: [cartId], references: [id])
+  cartId       Int
 }
 
-model product {
-  id          Int     @id @default(autoincrement())
-  name        String
-  price       Decimal
-  description String
-  stock       Int
-  location    String
-  Order       order?  @relation(fields: [orderId], references: [id])
-  orderId     Int?
+model Product {
+  id             Int              @id @default(autoincrement())
+  name           String
+  price          Decimal          @db.Money
+  description    String
+  stock          Int
+  location       String
+  ProductsOnCart ProductsOnCart[]
+}
+
+model Cart {
+  id             Int              @id @default(autoincrement())
+  customer       Customer?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  ProductsOnCart ProductsOnCart[]
+}
+
+model ProductsOnCart {
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    Int
+
+  @@id([productId, cartId])
 }

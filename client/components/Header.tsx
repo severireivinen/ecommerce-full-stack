@@ -14,9 +14,9 @@ const Header = () => {
           Home
         </div>
       </Link>
-      <Link href="/">
+      <Link href="/products">
         <div className="text-gray-500 text-2xl cursor-pointer hover:text-blue-500">
-          Contact
+          Products
         </div>
       </Link>
 
@@ -29,7 +29,7 @@ const Header = () => {
       )}
 
       {!authToken && (
-        <Link href="/login">
+        <Link href="/register">
           <div className="text-white text-2xl cursor-pointer hover:text-blue-500 bg-blue-500 py-1 px-4 rounded-lg">
             Register
           </div>

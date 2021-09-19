@@ -49,15 +49,21 @@ export class CustomerResolver {
 
   @Query(() => Customer)
   async singleCustomer(@Arg("data") data: number, @Ctx() ctx: Context) {
-    return await ctx.prisma.customer.findUnique({ where: { id: data } });
+    return await ctx.prisma.customer.findUnique({
+      where: { id: data },
+      include: { cart: true },
+    });
   }
 
   // Test query for authentication. Only accessible if logged in
-  @Query(() => String)
+  @Query(() => Customer)
   @UseMiddleware(isAuth)
   async me(@Ctx() ctx: Context) {
     console.log(ctx.payload);
-    return `My user id is: ${ctx.payload!.customerId}`;
+    //return `My user id is: ${ctx.payload!.customerId}`;
+    return await ctx.prisma.customer.findUnique({
+      where: { id: ctx.payload!.customerId },
+    });
   }
 
   @Mutation(() => Customer)
@@ -76,10 +82,11 @@ export class CustomerResolver {
       customer = await ctx.prisma.customer.create({
         data: {
           email: data.email,
+          password: hashedPassword,
+          phone: data.phone,
           firstName: data.firstName,
           lastName: data.lastName,
-          phone: data.phone,
-          password: hashedPassword,
+          cart: { create: {} },
         },
       });
     }

@@ -3,24 +3,14 @@ import {
   InMemoryCache,
   createHttpLink,
   ApolloLink,
+  makeVar,
 } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
 import { useAuthToken } from "./auth";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql",
   credentials: "include",
 });
-
-/*const authLink = setContext((_, { headers }) => {
-  const token = useAuthToken();
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `bearer ${token}` : "",
-    },
-  };
-});*/
 
 const authLink = (authToken: string) =>
   new ApolloLink((operation, forward) => {
@@ -36,6 +26,9 @@ const authLink = (authToken: string) =>
     return forward(operation);
   });
 
+// Initializes to an empty array
+export const cartItemsVar = makeVar<string[]>([]);
+
 const client = () => {
   const [authToken] = useAuthToken();
   return new ApolloClient({
@@ -43,10 +36,5 @@ const client = () => {
     link: authLink(authToken).concat(httpLink),
   });
 };
-
-/*const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: authLink().concat(httpLink),
-});*/
 
 export default client;

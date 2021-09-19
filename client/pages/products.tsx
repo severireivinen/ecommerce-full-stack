@@ -1,15 +1,15 @@
 import { NextPage } from "next";
 import React from "react";
 import Header from "../components/Header";
-import LoginForm from "../components/LoginForm";
+import ProductList from "../components/ProductList";
 
-const Login: NextPage = () => {
+const Products: NextPage = () => {
   return (
     <div>
       <Header />
-      <LoginForm />
+      <ProductList />
     </div>
   );
 };
 
-export default Login;
+export default Products;

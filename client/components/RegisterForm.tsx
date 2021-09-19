@@ -3,15 +3,18 @@ import React from "react";
 import * as Yup from "yup";
 import useRegister from "../hooks/useRegister";
 import { InputField } from "../utils/types";
+import { useRouter } from "next/router";
 
 const RegisterForm = () => {
   const [register]: any = useRegister();
+  const router = useRouter();
 
   const onSubmit = async (values: InputField) => {
     const { email, password, firstName, lastName, phone } = values;
 
     try {
       await register({ email, password, firstName, lastName, phone });
+      router.push("/");
     } catch (e) {
       alert("Email already exists");
       console.log("Error while registering");

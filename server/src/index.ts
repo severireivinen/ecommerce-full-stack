@@ -7,12 +7,14 @@ import { CustomerResolver } from "./resolvers/CustomerResolver";
 import { ProductResolver } from "./resolvers/ProductResolver";
 import { PrismaClient } from ".prisma/client";
 import cors from "cors";
+import { CartResolver } from "./resolvers/CartResolver";
 
 const main = async () => {
   const app = express();
   app.use(
     cors({
-      origin: "http://localhost:3000", //http://localhost:3000 tai *
+      //origin: "http://localhost:3000", //http://localhost:3000 tai *
+      origin: "*", //http://localhost:3000 tai *
       credentials: true,
     })
   );
@@ -25,7 +27,7 @@ const main = async () => {
   const prisma = new PrismaClient();
   const server = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [CustomerResolver, ProductResolver],
+      resolvers: [CustomerResolver, ProductResolver, CartResolver],
     }),
     //context: context,
     context: ({ req, res }) => ({ prisma: prisma, req, res }),
