@@ -32,12 +32,12 @@ export class CartResolver {
     return details;
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Product)
   async addToCart(
     @Arg("cartId") cartId: number,
     @Arg("productId") productId: number,
     @Ctx() ctx: Context
-  ) {
+  ): Promise<Product | null> {
     const product = await ctx.prisma.product.findUnique({
       where: {
         id: productId,
@@ -54,14 +54,31 @@ export class CartResolver {
       throw new Error("Product or cart not found");
     }
 
-    const addProduct = await ctx.prisma.productsOnCart.create({
-      data: { productId: product.id, cartId: cart.id },
-    });
+    /*const alreadyInCart = await ctx.prisma.productsOnCart.findUnique({
+      where: {
+        productId_cartId: { cartId: cart.id, productId: product.id },
+      },
+    });*/
 
-    if (addProduct) {
-      return true;
+    /*if (alreadyInCart) {
+      await ctx.prisma.productsOnCart.update({
+
+      })
+    }*/
+
+    /*const addProduct = await ctx.prisma.productsOnCart.create({
+      data: { productId: product.id, cartId: cart.id, amount: 1 },
+    });*/
+    try {
+      await ctx.prisma.productsOnCart.upsert({
+        where: { productId_cartId: { cartId: cart.id, productId: product.id } },
+        update: { amount: { increment: 1 } },
+        create: { cartId: cart.id, productId: product.id, amount: 1 },
+      });
+      return product;
+    } catch (e) {
+      throw new Error("Failed to add a product");
     }
-    return false;
   }
 
   @Mutation(() => Product)
@@ -84,7 +101,7 @@ export class CartResolver {
       throw new Error("Product or cart not found");
     }
 
-    try {
+    /*try {
       await ctx.prisma.productsOnCart.delete({
         where: {
           productId_cartId: { cartId: cart.id, productId: productToRemove.id },
@@ -93,6 +110,39 @@ export class CartResolver {
       return productToRemove;
     } catch (e) {
       throw new Error("Product not in cart");
+    }*/
+    try {
+      const onlyOneInCart = await ctx.prisma.productsOnCart.findUnique({
+        where: {
+          productId_cartId: { cartId: cart.id, productId: productToRemove.id },
+        },
+      });
+      if (!onlyOneInCart) {
+        throw new Error("Product not in cart");
+      } else if (onlyOneInCart.amount === 1) {
+        await ctx.prisma.productsOnCart.delete({
+          where: {
+            productId_cartId: {
+              cartId: cart.id,
+              productId: productToRemove.id,
+            },
+          },
+        });
+        return productToRemove;
+      } else {
+        await ctx.prisma.productsOnCart.update({
+          where: {
+            productId_cartId: {
+              cartId: cart.id,
+              productId: productToRemove.id,
+            },
+          },
+          data: { amount: { decrement: 1 } },
+        });
+        return productToRemove;
+      }
+    } catch (e) {
+      throw new Error("Failed to remove product");
     }
   }
 
