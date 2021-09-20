@@ -6,16 +6,19 @@ export class Customer {
   @Field(() => ID)
   id: number;
 
-  @Field()
+  @Field(() => String)
   @IsEmail()
   email: string;
 
-  @Field()
-  phone: string;
-
-  @Field()
+  @Field(() => String)
   firstName: string;
 
-  @Field()
+  @Field(() => String)
   lastName: string;
+
+  @Field(() => String)
+  phone: string;
+
+  @Field(() => Date)
+  registeredAt: Date;
 }

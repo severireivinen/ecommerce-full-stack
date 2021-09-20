@@ -2,6 +2,38 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+const customerData: Prisma.CustomerCreateInput[] = [
+  {
+    email: "sebu-95@hotmail.com",
+    firstName: "Severi",
+    lastName: "Reivinen",
+    password: "test123",
+    phone: "0505616073",
+  },
+  {
+    email: "lauri.peltonen@gmail.com",
+    firstName: "Lauri",
+    lastName: "Peltonen",
+    password: "test123",
+    phone: "0401231234",
+  },
+];
+
+const categoryData: Prisma.ProductCategoryCreateInput[] = [
+  {
+    name: "Shirts",
+    description: "T-shirts, long-sleeves, all kinds of shirts",
+  },
+  {
+    name: "Pants",
+    description: "jeans, sweatpants, shorts",
+  },
+  {
+    name: "Jackets",
+    description: "All jackets",
+  },
+];
+
 const productData: Prisma.ProductCreateInput[] = [
   {
     name: "Black T-Shirt",
@@ -35,12 +67,27 @@ const productData: Prisma.ProductCreateInput[] = [
 
 async function main() {
   console.log(`Starting seeding...`);
+  for (const pc of categoryData) {
+    const category = await prisma.productCategory.create({
+      data: pc,
+    });
+    console.log(`Created category with id: ${category.id}`);
+  }
+
   for (const p of productData) {
     const product = await prisma.product.create({
       data: p,
     });
     console.log(`Created product with id: ${product.id}`);
   }
+
+  for (const c of customerData) {
+    const customer = await prisma.customer.create({
+      data: c,
+    });
+    console.log(`Created customer with id: ${customer.id}`);
+  }
+
   console.log(`Seeding finished.`);
 }
 

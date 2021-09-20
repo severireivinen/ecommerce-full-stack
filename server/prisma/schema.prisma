@@ -11,41 +11,82 @@ generator client {
 }
 
 model Customer {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  password     String
-  phone        String
-  firstName    String
-  lastName     String
-  registeredAt DateTime @default(now())
-  cart         Cart     @relation(fields: [cartId], references: [id])
-  cartId       Int
+  id                Int                @id @default(autoincrement())
+  email             String             @unique
+  password          String
+  firstName         String
+  lastName          String
+  phone             String
+  registeredAt      DateTime           @default(now())
+  shoppingCartItems ShoppingCartItem[]
+  orders            Order[]
+}
+
+// customerId and productId switched to unique
+model ShoppingCartItem {
+  id         Int      @id @default(autoincrement())
+  quantity   Int
+  price      Decimal  @db.Money
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+
+  @@unique([productId, customerId])
 }
 
 model Product {
-  id             Int              @id @default(autoincrement())
-  name           String
-  price          Decimal          @db.Money
-  description    String
-  stock          Int
-  location       String
-  ProductsOnCart ProductsOnCart[]
+  id                Int                @id @default(autoincrement())
+  name              String
+  description       String
+  price             Decimal            @db.Money
+  stock             Int
+  location          String             @unique
+  productCategory   ProductCategory?   @relation(fields: [productCategoryId], references: [id])
+  productCategoryId Int?
+  shoppingCartItems ShoppingCartItem[]
+  orderItems        OrderItem[]
 }
 
-model Cart {
-  id             Int              @id @default(autoincrement())
-  customer       Customer?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  ProductsOnCart ProductsOnCart[]
+model ProductCategory {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  products    Product[]
 }
 
-model ProductsOnCart {
-  amount    Int
+model Order {
+  id                Int              @id @default(autoincrement())
+  customer          Customer         @relation(fields: [customerId], references: [id])
+  customerId        Int
+  orderItems        OrderItem[]
+  orderStatusCode   OrderStatusCode? @relation(fields: [orderStatusCodeId], references: [id])
+  orderStatusCodeId Int
+  shipments         Shipment[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  price     Decimal @db.Money
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   Int
   product   Product @relation(fields: [productId], references: [id])
   productId Int
-  cart      Cart    @relation(fields: [cartId], references: [id])
-  cartId    Int
+}
 
-  @@id([productId, cartId])
+model OrderStatusCode {
+  id          Int     @id @default(autoincrement())
+  statusCode  Boolean @default(false)
+  description String
+  orders      Order[]
+}
+
+model Shipment {
+  id         Int      @id @default(autoincrement())
+  toAdress   String
+  trackingNo String
+  sentAt     DateTime
+  order      Order    @relation(fields: [orderId], references: [id])
+  orderId    Int
 }

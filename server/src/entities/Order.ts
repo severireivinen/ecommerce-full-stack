@@ -1,24 +1,15 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import { Customer } from "./Customer";
-import { Product } from "./Product";
+import { OrderStatusCode } from "./OrderStatusCode";
 
 @ObjectType()
 export class Order {
   @Field(() => ID)
   id: number;
 
-  @Field()
-  orderDate: Date;
+  @Field(() => Customer)
+  customerId: Customer;
 
-  @Field()
-  finishDate: Date;
-
-  @Field()
-  products: [Product];
-
-  @Field()
-  customer: Customer;
-
-  @Field()
-  customerId: number;
+  @Field(() => OrderStatusCode)
+  orderStatusCode: OrderStatusCode;
 }

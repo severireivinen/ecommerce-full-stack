@@ -15,6 +15,7 @@ import { AuthenticationError } from "apollo-server-errors";
 import { Context } from "../context";
 import { createAccessToken } from "../utils/auth";
 import { isAuth } from "../utils/isAuth";
+import { ShoppingCartItem } from "../entities/ShoppingCartItem";
 
 @InputType()
 class UserRegisterInput {
@@ -43,27 +44,77 @@ class LoginResponse {
 @Resolver()
 export class CustomerResolver {
   @Query(() => [Customer])
-  async allCustomers(@Ctx() ctx: Context) {
+  async allCustomers(@Ctx() ctx: Context): Promise<Customer[]> {
     return await ctx.prisma.customer.findMany({});
-  }
-
-  @Query(() => Customer)
-  async singleCustomer(@Arg("data") data: number, @Ctx() ctx: Context) {
-    return await ctx.prisma.customer.findUnique({
-      where: { id: data },
-      include: { cart: true },
-    });
   }
 
   // Test query for authentication. Only accessible if logged in
   @Query(() => Customer)
   @UseMiddleware(isAuth)
-  async me(@Ctx() ctx: Context) {
+  async me(@Ctx() ctx: Context): Promise<Customer | null> {
     console.log(ctx.payload);
-    //return `My user id is: ${ctx.payload!.customerId}`;
-    return await ctx.prisma.customer.findUnique({
+    const logged = await ctx.prisma.customer.findUnique({
       where: { id: ctx.payload!.customerId },
     });
+    if (!logged) {
+      throw new AuthenticationError("Not logged in");
+    }
+    return logged;
+  }
+
+  @Query(() => [ShoppingCartItem])
+  async getCustomerCart(
+    @Arg("customerId") customerId: number,
+    @Ctx() ctx: Context
+  ): Promise<ShoppingCartItem[] | null> {
+    const customer = await ctx.prisma.customer.findUnique({
+      where: { id: customerId },
+    });
+
+    if (!customer) {
+      throw new Error(`Could not find custmer with id ${customerId}`);
+    }
+
+    const customercart = await ctx.prisma.shoppingCartItem.findMany({
+      where: {
+        customerId: customer.id,
+      },
+      include: {
+        product: true,
+        customer: true,
+      },
+    });
+    return customercart;
+  }
+
+  @Mutation(() => Boolean)
+  async emptyCustomerCart(
+    @Arg("customerId") customerId: number,
+    @Ctx() ctx: Context
+  ): Promise<Boolean> {
+    const customer = await ctx.prisma.customer.findUnique({
+      where: { id: customerId },
+    });
+
+    if (!customer) {
+      throw new Error(`Could not find customer with id ${customerId}`);
+    }
+
+    const anyItemsOnCart = await ctx.prisma.shoppingCartItem.findFirst({
+      where: { customerId: customer.id },
+    });
+
+    if (!anyItemsOnCart) {
+      throw new Error("User has no items on cart");
+    }
+
+    const deleteRecord = await ctx.prisma.shoppingCartItem.deleteMany({
+      where: {
+        customerId: customer.id,
+      },
+    });
+
+    return deleteRecord ? true : false;
   }
 
   @Mutation(() => Customer)
@@ -86,7 +137,6 @@ export class CustomerResolver {
           phone: data.phone,
           firstName: data.firstName,
           lastName: data.lastName,
-          cart: { create: {} },
         },
       });
     }
@@ -127,7 +177,7 @@ export class CustomerResolver {
   }
 
   @Mutation(() => Boolean)
-  async logout(@Ctx() ctx: Context) {
+  async logout(@Ctx() ctx: Context): Promise<Boolean> {
     ctx.res.cookie("jid", "", { httpOnly: false });
     return true;
   }

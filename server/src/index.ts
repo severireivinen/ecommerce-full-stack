@@ -7,7 +7,7 @@ import { CustomerResolver } from "./resolvers/CustomerResolver";
 import { ProductResolver } from "./resolvers/ProductResolver";
 import { PrismaClient } from ".prisma/client";
 import cors from "cors";
-import { CartResolver } from "./resolvers/CartResolver";
+import { ShoppingCartItemResolver } from "./resolvers/ShoppingCartItemResolver";
 
 const main = async () => {
   const app = express();
@@ -27,7 +27,7 @@ const main = async () => {
   const prisma = new PrismaClient();
   const server = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [CustomerResolver, ProductResolver, CartResolver],
+      resolvers: [CustomerResolver, ProductResolver, ShoppingCartItemResolver],
     }),
     //context: context,
     context: ({ req, res }) => ({ prisma: prisma, req, res }),
