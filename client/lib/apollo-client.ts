@@ -3,7 +3,6 @@ import {
   InMemoryCache,
   createHttpLink,
   ApolloLink,
-  makeVar,
 } from "@apollo/client";
 import { useAuthToken } from "./auth";
 
@@ -25,9 +24,6 @@ const authLink = (authToken: string) =>
 
     return forward(operation);
   });
-
-// Initializes to an empty array
-export const cartItemsVar = makeVar<string[]>([]);
 
 const client = () => {
   const [authToken] = useAuthToken();

@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
+import argon2 from "argon2";
 
 const prisma = new PrismaClient();
 
@@ -82,8 +83,9 @@ async function main() {
   }
 
   for (const c of customerData) {
+    const hashedPassword = await argon2.hash(c.password);
     const customer = await prisma.customer.create({
-      data: c,
+      data: { ...c, password: hashedPassword },
     });
     console.log(`Created customer with id: ${customer.id}`);
   }

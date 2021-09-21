@@ -21,8 +21,12 @@ const RegisterForm = () => {
     }
   };
 
+  const login = () => {
+    router.push("/login");
+  };
+
   return (
-    <div>
+    <div className="h-screen w-screen flex flex-col items-center justify-center bg-yellow-600">
       <Formik
         initialValues={{
           email: "",
@@ -56,32 +60,82 @@ const RegisterForm = () => {
         })}
         onSubmit={onSubmit}
       >
-        <Form className="flex flex-col bg-gray-700">
-          <label htmlFor="email">Email</label>
-          <Field name="email" type="text" />
-          <ErrorMessage name="email" />
+        <Form>
+          <div className="border flex flex-col items-center p-16 bg-white">
+            <h1 className="text-3xl font-bold m-3 py-10">ECommerce Demo</h1>
+            <div className="flex flex-col w-full space-y-3">
+              <div className="border rounded-sm">
+                <Field
+                  className="p-1 bg-gray-50 text-sm w-full outline-none"
+                  name="email"
+                  type="text"
+                  placeholder="E-Mail"
+                />
+              </div>
+              <ErrorMessage name="email" />
 
-          <label htmlFor="password">Password</label>
-          <Field name="password" type="password" />
-          <ErrorMessage name="password" />
+              <div className="border rounded-sm">
+                <Field
+                  className="p-1 bg-gray-50 text-sm w-full outline-none"
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                />
+              </div>
+              <ErrorMessage name="password" />
 
-          <label htmlFor="passwordConfirm">Confirm Password</label>
-          <Field name="passwordConfirm" type="password" />
-          <ErrorMessage name="passwordConfirm" />
+              <div className="border rounded-sm">
+                <Field
+                  className="p-1 bg-gray-50 text-sm w-full outline-none"
+                  name="passwordConfirm"
+                  type="password"
+                  placeholder="Confirm password"
+                />
+              </div>
+              <ErrorMessage name="passwordConfirm" />
 
-          <label htmlFor="firstName">First Name</label>
-          <Field name="firstName" type="text" />
-          <ErrorMessage name="firstName" />
+              <div className="border rounded-sm">
+                <Field
+                  className="p-1 bg-gray-50 text-sm w-full outline-none"
+                  name="firstName"
+                  type="text"
+                  placeholder="First Name"
+                />
+              </div>
+              <ErrorMessage name="firstName" />
 
-          <label htmlFor="lastName">Last Name</label>
-          <Field name="lastName" type="text" />
-          <ErrorMessage name="lastName" />
+              <div className="border rounded-sm">
+                <Field
+                  className="p-1 bg-gray-50 text-sm w-full outline-none"
+                  name="lastName"
+                  type="text"
+                  placeholder="Last Name"
+                />
+              </div>
+              <ErrorMessage name="lastName" />
 
-          <label htmlFor="phone">Phone</label>
-          <Field name="phone" type="text" />
-          <ErrorMessage name="phone" />
-
-          <button type="submit">Register</button>
+              <div className="border rounded-sm">
+                <Field
+                  className="p-1 bg-gray-50 text-sm w-full outline-none"
+                  name="phone"
+                  type="text"
+                  placeholder="Phone Number"
+                />
+              </div>
+              <ErrorMessage name="phone" />
+              <div className="bg-black mx-10 text-center text-white text-md rounded-md">
+                <button className="font-semibold p-2" type="submit">
+                  Register
+                </button>
+              </div>
+              <div className="flex justify-center space-x-2">
+                <p>Already registered?</p>
+                <p className="cursor-pointer text-blue-400" onClick={login}>
+                  Login
+                </p>
+              </div>
+            </div>
+          </div>
         </Form>
       </Formik>
     </div>

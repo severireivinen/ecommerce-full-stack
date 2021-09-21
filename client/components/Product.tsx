@@ -16,14 +16,16 @@ const Product = ({ product }: any) => {
   };
 
   return (
-    <div className="flex flex-col items-center border p-3 rounded-lg bg-gray-400">
-      <div className="text-lg font-bold">{product.name}</div>
-      <div className="font-thin">{product.description}</div>
-      <div className="flex items-center space-x-6">
-        <div className="font-thin text-xl text-white">{product.price} €</div>
+    <div className="flex flex-col items-center justify-between border p-3 rounded-lg bg-yellow-600">
+      <div className="flex flex-col items-center">
+        <div className="text-lg font-bold">{product.name}</div>
+        <div className="font-thin">{product.description}</div>
+      </div>
+      <div className="flex items-center space-x-3">
+        <div className="text-lg text-white">{product.price} €</div>
         <div
           onClick={authToken ? logged : notLogged}
-          className="p-2 bg-blue-700 text-white font-bold rounded-md cursor-pointer transition duration-500 ease-in-out transform hover:scale-110"
+          className="p-2 bg-black text-white font-bold rounded-md cursor-pointer transition duration-500 ease-in-out transform hover:scale-110"
         >
           Add to Cart
         </div>
