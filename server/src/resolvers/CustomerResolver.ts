@@ -8,14 +8,13 @@ import {
   ObjectType,
   Query,
   Resolver,
-  UseMiddleware,
 } from "type-graphql";
 import argon2 from "argon2";
 import { AuthenticationError } from "apollo-server-errors";
 import { Context } from "../context";
-import { createAccessToken } from "../utils/auth";
-import { isAuth } from "../utils/isAuth";
 import { ShoppingCartItem } from "../entities/ShoppingCartItem";
+import signJwt from "../utils/signJwt";
+import verifyJwt from "../utils/verifyJwt";
 
 @InputType()
 class UserRegisterInput {
@@ -48,18 +47,24 @@ export class CustomerResolver {
     return await ctx.prisma.customer.findMany({});
   }
 
-  // Test query for authentication. Only accessible if logged in
   @Query(() => Customer)
-  @UseMiddleware(isAuth)
-  async me(@Ctx() ctx: Context): Promise<Customer | null> {
-    console.log(ctx.payload);
-    const logged = await ctx.prisma.customer.findUnique({
-      where: { id: ctx.payload!.customerId },
-    });
-    if (!logged) {
-      throw new AuthenticationError("Not logged in");
+  async authorizedCustomer(@Ctx() ctx: Context): Promise<Customer | null> {
+    const token = ctx.req.headers.authorization;
+    if (!token) {
+      throw new AuthenticationError("No token provided");
     }
-    return logged;
+
+    const user = verifyJwt(token);
+    console.log("User: ", user);
+
+    const tokenFound = await ctx.prisma.customer.findUnique({
+      where: { accessToken: token },
+    });
+
+    if (!tokenFound) {
+      throw new AuthenticationError("Invalid token provided");
+    }
+    return tokenFound;
   }
 
   @Query(() => [ShoppingCartItem])
@@ -165,16 +170,29 @@ export class CustomerResolver {
       throw new AuthenticationError("Invalid email or password");
     }
 
-    const token = createAccessToken(customer);
+    const token = signJwt({ ...customer, accessToken: null });
+    await ctx.prisma.customer.update({
+      where: { id: customer.id },
+      data: { accessToken: `${token}` },
+    });
 
+    console.log(customer);
     return {
-      accessToken: token,
+      accessToken: `${token}`,
     };
   }
 
   @Mutation(() => Boolean)
   async logout(@Ctx() ctx: Context): Promise<Boolean> {
-    ctx.res.cookie("jid", "", { httpOnly: false });
-    return true;
+    const token = ctx.req.headers.authorization;
+    try {
+      await ctx.prisma.customer.update({
+        where: { accessToken: token },
+        data: { accessToken: null },
+      });
+      return true;
+    } catch (e) {
+      throw new Error("Error logging out");
+    }
   }
 }

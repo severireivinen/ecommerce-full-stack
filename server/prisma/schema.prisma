@@ -18,6 +18,7 @@ model Customer {
   lastName          String
   phone             String
   registeredAt      DateTime           @default(now())
+  accessToken       String?            @unique
   shoppingCartItems ShoppingCartItem[]
   orders            Order[]
 }

@@ -9,3 +9,14 @@ export const PRODUCT_DETAILS = gql`
     location
   }
 `;
+
+export const CUSTOMER_DETAILS = gql`
+  fragment CustomerDetails on Customer {
+    id
+    email
+    firstName
+    lastName
+    phone
+    accessToken
+  }
+`;

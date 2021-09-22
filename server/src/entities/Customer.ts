@@ -6,19 +6,22 @@ export class Customer {
   @Field(() => ID)
   id: number;
 
-  @Field(() => String)
+  @Field()
   @IsEmail()
   email: string;
 
-  @Field(() => String)
+  @Field()
   firstName: string;
 
-  @Field(() => String)
+  @Field()
   lastName: string;
 
-  @Field(() => String)
+  @Field()
   phone: string;
 
   @Field(() => Date)
   registeredAt: Date;
+
+  @Field(() => String, { nullable: true })
+  accessToken: string | null;
 }

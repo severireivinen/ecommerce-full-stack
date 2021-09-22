@@ -6,19 +6,12 @@ import {
   HiOutlineSearch,
   HiOutlineUser,
 } from "react-icons/hi";
-import useAuthStorage from "../hooks/useAuthStorage";
+import useAuthorizedCustomer from "../hooks/useAuthorizedCustomer";
 
 const Header = () => {
-  //const logout = useLogout();
-
+  const [logout] = useLogout();
   const [searchOpen, setSearchOpen] = useState(false);
-
-  const tempAuth = false;
-  const authStorage: any = useAuthStorage();
-
-  const logout = () => {
-    authStorage.removeAccessToken();
-  };
+  const { authorizedCustomer } = useAuthorizedCustomer();
 
   const handleSearch = (e: any) => {
     e.preventDefault();
@@ -41,9 +34,9 @@ const Header = () => {
           <a className="cursor-pointer">HOT NOW!</a>
         </Link>
       </div>
-      {tempAuth ? (
+      {authorizedCustomer ? (
         <div className="flex justify-end space-x-6">
-          <div onClick={logout}>
+          <div onClick={logout as any}>
             <HiOutlineUser size={25} className=" cursor-pointer" />
           </div>
 

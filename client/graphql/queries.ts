@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { PRODUCT_DETAILS } from "./fragments";
+import { CUSTOMER_DETAILS, PRODUCT_DETAILS } from "./fragments";
 
 export const ALL_PRODUCTS = gql`
   query allProducts {
@@ -17,4 +17,13 @@ export const SINGLE_PRODUCT = gql`
     }
   }
   ${PRODUCT_DETAILS}
+`;
+
+export const AUTHORIZED_CUSTOMER = gql`
+  query authorizedCustomer {
+    authorizedCustomer {
+      ...CustomerDetails
+    }
+  }
+  ${CUSTOMER_DETAILS}
 `;
