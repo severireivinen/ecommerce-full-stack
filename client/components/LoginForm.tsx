@@ -5,6 +5,7 @@ import { LoginField } from "../utils/types";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { useApolloClient } from "@apollo/client";
+import useAuthStorage from "../hooks/useAuthStorage";
 
 const LoginForm = () => {
   const [login]: any = useLogin();
@@ -16,6 +17,7 @@ const LoginForm = () => {
 
     try {
       await login({ email, password });
+
       client.resetStore();
       router.push("/");
     } catch (e) {

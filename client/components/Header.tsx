@@ -6,13 +6,19 @@ import {
   HiOutlineSearch,
   HiOutlineUser,
 } from "react-icons/hi";
+import useAuthStorage from "../hooks/useAuthStorage";
 
 const Header = () => {
-  const logout = useLogout();
+  //const logout = useLogout();
 
   const [searchOpen, setSearchOpen] = useState(false);
 
   const tempAuth = false;
+  const authStorage: any = useAuthStorage();
+
+  const logout = () => {
+    authStorage.removeAccessToken();
+  };
 
   const handleSearch = (e: any) => {
     e.preventDefault();

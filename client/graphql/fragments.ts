@@ -6,7 +6,6 @@ export const PRODUCT_DETAILS = gql`
     name
     price
     description
-    stock
     location
   }
 `;

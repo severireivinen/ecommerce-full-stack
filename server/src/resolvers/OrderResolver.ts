@@ -26,7 +26,7 @@ export class OrderResolver {
       where: { customerId: customer.id },
     });
 
-    const returOrderObjects = orders.map(async (o) => ({
+    /*const returOrderObjects = orders.map(async (o: any) => ({
       id: o.id,
       customer: await ctx.prisma.customer.findUnique({
         where: { id: o.customerId },
@@ -34,8 +34,8 @@ export class OrderResolver {
       orderStatusCode: await ctx.prisma.orderStatusCode.findUnique({
         where: { id: o.orderStatusCodeId },
       }),
-    }));
-    return returOrderObjects;
+    }));*/
+    return orders;
   }
 
   @Mutation(() => Order)

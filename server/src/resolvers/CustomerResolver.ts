@@ -167,11 +167,6 @@ export class CustomerResolver {
 
     const token = createAccessToken(customer);
 
-    ctx.res.cookie("jid", token, {
-      httpOnly: false,
-      maxAge: 1000 * 60 * 60 * 24 * 30,
-    });
-
     return {
       accessToken: token,
     };
