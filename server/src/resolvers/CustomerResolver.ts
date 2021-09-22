@@ -69,15 +69,15 @@ export class CustomerResolver {
 
   @Query(() => [ShoppingCartItem])
   async getCustomerCart(
-    @Arg("customerId") customerId: number,
     @Ctx() ctx: Context
   ): Promise<ShoppingCartItem[] | null> {
+    const token = ctx.req.headers.authorization;
     const customer = await ctx.prisma.customer.findUnique({
-      where: { id: customerId },
+      where: { accessToken: token },
     });
 
     if (!customer) {
-      throw new Error(`Could not find custmer with id ${customerId}`);
+      throw new Error(`Could not find custmer`);
     }
 
     const customercart = await ctx.prisma.shoppingCartItem.findMany({

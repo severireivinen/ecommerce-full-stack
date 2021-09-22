@@ -27,3 +27,17 @@ export const AUTHORIZED_CUSTOMER = gql`
   }
   ${CUSTOMER_DETAILS}
 `;
+
+export const CUSTOMER_CART = gql`
+  query getCustomerCart {
+    getCustomerCart {
+      id
+      quantity
+      price
+      product {
+        ...ProductDetails
+      }
+    }
+  }
+  ${PRODUCT_DETAILS}
+`;
