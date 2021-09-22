@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useLogout } from "../hooks/useLogout";
-import { useAuthToken } from "../lib/auth";
 import {
   HiOutlineShoppingBag,
   HiOutlineSearch,
@@ -10,8 +9,10 @@ import {
 
 const Header = () => {
   const logout = useLogout();
-  const [authToken] = useAuthToken();
+
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const tempAuth = false;
 
   const handleSearch = (e: any) => {
     e.preventDefault();
@@ -34,7 +35,7 @@ const Header = () => {
           <a className="cursor-pointer">HOT NOW!</a>
         </Link>
       </div>
-      {authToken ? (
+      {tempAuth ? (
         <div className="flex justify-end space-x-6">
           <div onClick={logout}>
             <HiOutlineUser size={25} className=" cursor-pointer" />

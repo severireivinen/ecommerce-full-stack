@@ -3,6 +3,17 @@ import argon2 from "argon2";
 
 const prisma = new PrismaClient();
 
+const orderStatusData: Prisma.OrderStatusCodeCreateInput[] = [
+  {
+    processed: false,
+    description: "Order has not been processed",
+  },
+  {
+    processed: true,
+    description: "Order has been processed",
+  },
+];
+
 const customerData: Prisma.CustomerCreateInput[] = [
   {
     email: "sebu-95@hotmail.com",
@@ -68,6 +79,13 @@ const productData: Prisma.ProductCreateInput[] = [
 
 async function main() {
   console.log(`Starting seeding...`);
+  for (const sc of orderStatusData) {
+    const statuscode = await prisma.orderStatusCode.create({
+      data: sc,
+    });
+    console.log(`Created statuscode with id: ${statuscode.id}`);
+  }
+
   for (const pc of categoryData) {
     const category = await prisma.productCategory.create({
       data: pc,

@@ -1,7 +1,6 @@
 import { Decimal } from "@prisma/client/runtime";
 import { Field, ID, Int, ObjectType } from "type-graphql";
 import { DecimalScalar } from "../scalars/Decimal";
-import { Order } from "./Order";
 import { Product } from "./Product";
 
 @ObjectType()
@@ -15,8 +14,8 @@ export class OrderItem {
   @Field(() => DecimalScalar)
   price: Decimal;
 
-  @Field(() => Order)
-  orderId: Order;
+  @Field(() => Int)
+  orderId: number;
 
   @Field(() => Product)
   product: Product;

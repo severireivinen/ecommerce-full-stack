@@ -167,8 +167,6 @@ export class CustomerResolver {
 
     const token = createAccessToken(customer);
 
-    // Successful login
-    //ctx.res.cookie("jid", createRefreshToken(customer), { httpOnly: false });
     ctx.res.cookie("jid", token, {
       httpOnly: false,
       maxAge: 1000 * 60 * 60 * 24 * 30,

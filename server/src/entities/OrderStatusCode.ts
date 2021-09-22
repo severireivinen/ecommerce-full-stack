@@ -6,7 +6,7 @@ export class OrderStatusCode {
   id: number;
 
   @Field(() => Boolean)
-  statusCode: Boolean;
+  processed: Boolean;
 
   @Field(() => String)
   description: string;

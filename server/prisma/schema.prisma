@@ -77,7 +77,7 @@ model OrderItem {
 
 model OrderStatusCode {
   id          Int     @id @default(autoincrement())
-  statusCode  Boolean @default(false)
+  processed   Boolean @unique @default(false)
   description String
   orders      Order[]
 }

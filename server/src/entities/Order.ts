@@ -8,7 +8,7 @@ export class Order {
   id: number;
 
   @Field(() => Customer)
-  customerId: Customer;
+  customer: Customer;
 
   @Field(() => OrderStatusCode)
   orderStatusCode: OrderStatusCode;
