@@ -6,7 +6,7 @@ import { Product } from "./Product";
 @ObjectType()
 export class OrderItem {
   @Field(() => ID)
-  id: number;
+  id: string;
 
   @Field(() => Int)
   quantity: number;

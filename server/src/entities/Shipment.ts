@@ -4,7 +4,7 @@ import { Order } from "./Order";
 @ObjectType()
 export class Shipment {
   @Field(() => ID)
-  id: number;
+  id: string;
 
   @Field(() => String)
   toAddress: string;

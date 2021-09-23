@@ -7,7 +7,7 @@ import { Customer } from "./Customer";
 @ObjectType()
 export class ShoppingCartItem {
   @Field(() => ID)
-  id: number;
+  id: string;
 
   @Field(() => Int)
   quantity: number;

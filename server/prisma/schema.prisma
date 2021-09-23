@@ -11,7 +11,7 @@ generator client {
 }
 
 model Customer {
-  id                Int                @id @default(autoincrement())
+  id                String             @id @default(cuid())
   email             String             @unique
   password          String
   firstName         String
@@ -25,69 +25,69 @@ model Customer {
 
 // customerId and productId switched to unique
 model ShoppingCartItem {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(cuid())
   quantity   Int
   price      Decimal  @db.Money
   product    Product  @relation(fields: [productId], references: [id])
-  productId  Int
+  productId  String
   customer   Customer @relation(fields: [customerId], references: [id])
-  customerId Int
+  customerId String
 
   @@unique([productId, customerId])
 }
 
 model Product {
-  id                Int                @id @default(autoincrement())
+  id                String             @id @default(cuid())
   name              String
   description       String
   price             Decimal            @db.Money
   stock             Int
   location          String             @unique
   productCategory   ProductCategory?   @relation(fields: [productCategoryId], references: [id])
-  productCategoryId Int?
+  productCategoryId String?
   shoppingCartItems ShoppingCartItem[]
   orderItems        OrderItem[]
 }
 
 model ProductCategory {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(cuid())
   name        String
   description String
   products    Product[]
 }
 
 model Order {
-  id                Int              @id @default(autoincrement())
+  id                String           @id @default(cuid())
   customer          Customer         @relation(fields: [customerId], references: [id])
-  customerId        Int
+  customerId        String
   orderItems        OrderItem[]
   orderStatusCode   OrderStatusCode? @relation(fields: [orderStatusCodeId], references: [id])
-  orderStatusCodeId Int
+  orderStatusCodeId String
   shipments         Shipment[]
 }
 
 model OrderItem {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(cuid())
   quantity  Int
   price     Decimal @db.Money
   order     Order   @relation(fields: [orderId], references: [id])
-  orderId   Int
+  orderId   String
   product   Product @relation(fields: [productId], references: [id])
-  productId Int
+  productId String
 }
 
 model OrderStatusCode {
-  id          Int     @id @default(autoincrement())
+  id          String  @id @default(cuid())
   processed   Boolean @unique @default(false)
   description String
   orders      Order[]
 }
 
 model Shipment {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(cuid())
   toAdress   String
   trackingNo String
   sentAt     DateTime
   order      Order    @relation(fields: [orderId], references: [id])
-  orderId    Int
+  orderId    String
 }

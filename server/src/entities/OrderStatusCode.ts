@@ -3,7 +3,7 @@ import { Field, ID, ObjectType } from "type-graphql";
 @ObjectType()
 export class OrderStatusCode {
   @Field(() => ID)
-  id: number;
+  id: string;
 
   @Field(() => Boolean)
   processed: Boolean;

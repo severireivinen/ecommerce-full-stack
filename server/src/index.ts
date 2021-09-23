@@ -9,7 +9,6 @@ import { ProductResolver } from "./resolvers/ProductResolver";
 import { PrismaClient } from ".prisma/client";
 import { ShoppingCartItemResolver } from "./resolvers/ShoppingCartItemResolver";
 import { OrderResolver } from "./resolvers/OrderResolver";
-import { OrderItemResolver } from "./resolvers/OrderItemResolver";
 
 const main = async () => {
   const app = express();
@@ -29,7 +28,6 @@ const main = async () => {
         ProductResolver,
         ShoppingCartItemResolver,
         OrderResolver,
-        OrderItemResolver,
       ],
     }),
     context: ({ req, res }) => ({ prisma: prisma, req, res }),

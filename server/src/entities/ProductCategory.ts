@@ -4,7 +4,7 @@ import { Product } from "./Product";
 @ObjectType()
 export class ProductCategory {
   @Field(() => ID)
-  id: number;
+  id: string;
 
   @Field(() => String)
   name: string;

@@ -6,12 +6,12 @@ import { Context } from "../context";
 export class ShoppingCartItemResolver {
   @Mutation(() => ShoppingCartItem)
   async addToCart(
-    @Arg("customerId") customerId: number,
-    @Arg("productId") productId: number,
+    @Arg("id") id: string,
     @Ctx() ctx: Context
   ): Promise<ShoppingCartItem> {
+    const token = ctx.req.headers.authorization;
     const product = await ctx.prisma.product.findUnique({
-      where: { id: productId },
+      where: { id: id },
     });
 
     if (!product) {
@@ -19,7 +19,7 @@ export class ShoppingCartItemResolver {
     }
 
     const customer = await ctx.prisma.customer.findUnique({
-      where: { id: customerId },
+      where: { accessToken: token },
     });
 
     if (!customer) {
@@ -44,13 +44,18 @@ export class ShoppingCartItemResolver {
         customerId: customer.id,
       },
     });
-    const toReturn = { ...cartProduct, customer: customer, product: product };
+    const toReturn = {
+      ...cartProduct,
+      id: cartProduct.id.toString(),
+      customer: customer,
+      product: product,
+    };
     return toReturn;
   }
   @Mutation(() => ShoppingCartItem)
   async removeFromCart(
-    @Arg("customerId") customerId: number,
-    @Arg("productId") productId: number,
+    @Arg("customerId") customerId: string,
+    @Arg("productId") productId: string,
     @Ctx() ctx: Context
   ): Promise<ShoppingCartItem | null> {
     const product = await ctx.prisma.product.findUnique({
@@ -93,6 +98,7 @@ export class ShoppingCartItemResolver {
       });
       const toReturn = {
         ...removedEntry,
+        id: removedEntry.id.toString(),
         customer: customer,
         product: product,
       };
@@ -112,6 +118,7 @@ export class ShoppingCartItemResolver {
       });
       const toReturn = {
         ...newCartProduct,
+        id: newCartProduct.id.toString(),
         customer: customer,
         product: product,
       };

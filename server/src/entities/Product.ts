@@ -5,7 +5,7 @@ import { DecimalScalar } from "../scalars/Decimal";
 @ObjectType()
 export class Product {
   @Field(() => ID)
-  id: number;
+  id: string;
 
   @Field(() => String)
   name: string;

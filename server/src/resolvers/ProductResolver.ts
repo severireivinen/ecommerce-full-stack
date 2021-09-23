@@ -10,7 +10,7 @@ export class ProductResolver {
   }
 
   @Query(() => Product)
-  async singleProduct(@Arg("id") id: number, @Ctx() ctx: Context) {
+  async singleProduct(@Arg("id") id: string, @Ctx() ctx: Context) {
     return await ctx.prisma.product.findUnique({ where: { id: id } });
   }
 }

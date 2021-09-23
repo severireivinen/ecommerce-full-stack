@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { PRODUCT_DETAILS } from "./fragments";
 
 export const REGISTER = gql`
   mutation register(
@@ -36,5 +37,25 @@ export const LOGIN = gql`
 export const LOGOUT = gql`
   mutation logout {
     logout
+  }
+`;
+
+export const ADD_TO_CART = gql`
+  mutation addToCart($id: String!) {
+    addToCart(id: $id) {
+      id
+      quantity
+      price
+      product {
+        ...ProductDetails
+      }
+    }
+  }
+  ${PRODUCT_DETAILS}
+`;
+
+export const CREATE_ORDER = gql`
+  mutation createOrder {
+    createOrder
   }
 `;

@@ -89,12 +89,14 @@ export class CustomerResolver {
         customer: true,
       },
     });
+
+    //@ts-ignore
     return customercart;
   }
 
   @Mutation(() => Boolean)
   async emptyCustomerCart(
-    @Arg("customerId") customerId: number,
+    @Arg("customerId") customerId: string,
     @Ctx() ctx: Context
   ): Promise<Boolean> {
     const customer = await ctx.prisma.customer.findUnique({
