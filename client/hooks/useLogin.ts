@@ -1,6 +1,6 @@
 import { useMutation, useApolloClient } from "@apollo/client";
 import { LOGIN } from "../graphql/mutations";
-import { LoginField } from "../utils/types";
+import { LoginField } from "../lib/types";
 import { useRouter } from "next/router";
 import useAuthStorage from "./useAuthStorage";
 

@@ -1,87 +1,76 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useLogout } from "../hooks/useLogout";
-import {
-  HiOutlineShoppingBag,
-  HiOutlineSearch,
-  HiOutlineUser,
-} from "react-icons/hi";
+import { FiShoppingCart } from "react-icons/fi";
+import { FaBars } from "react-icons/fa";
 import useAuthorizedCustomer from "../hooks/useAuthorizedCustomer";
+import useLogout from "../hooks/useLogout";
 
 const Header = () => {
-  const [logout] = useLogout();
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { authorizedCustomer } = useAuthorizedCustomer();
-
-  const handleSearch = (e: any) => {
-    e.preventDefault();
-    console.log("Search submitted");
-  };
+  const [logout] = useLogout();
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-10 p-6 bg-black text-white items-center">
-      <Link href="/">
-        <a className="hidden md:block text-xl font-bold">ECommerce</a>
-      </Link>
-      <div className="flex flex-col items-center md:flex-row justify-around">
-        <Link href="/products">
-          <a className="cursor-pointer">SHOP</a>
-        </Link>
-        <Link href="/">
-          <a className="cursor-pointer">CATEGORIES</a>
-        </Link>
-        <Link href="/">
-          <a className="cursor-pointer">HOT NOW!</a>
-        </Link>
-      </div>
-      {authorizedCustomer ? (
-        <div className="flex justify-end space-x-6">
-          <div onClick={logout as any}>
-            <HiOutlineUser size={25} className=" cursor-pointer" />
-          </div>
-
-          <Link href="/cart">
-            <a>
-              <HiOutlineShoppingBag size={25} className=" cursor-pointer" />
-            </a>
+    <div className="sticky top-0 z-50 p-5 bg-black">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 lg:mx-4">
+        <div className="hidden sm:block">
+          <Link href="/">
+            <a className=" text-white font-semibold">ECommerce</a>
           </Link>
-          <div onClick={() => setSearchOpen(true)}>
-            <HiOutlineSearch size={25} className=" cursor-pointer" />
-          </div>
         </div>
-      ) : (
-        <div className="flex justify-end space-x-6">
-          <Link href="/login">
-            <a>
-              <HiOutlineUser size={25} className=" cursor-pointer" />
-            </a>
+        <FaBars
+          className="block xxs:hidden text-white self-center"
+          size={20}
+          onClick={() => setMenuOpen(!menuOpen)}
+        />
+        {menuOpen && (
+          <nav className="fixed top-10 left-0 bg-black p-4">
+            <div className="flex flex-col space-y-2">
+              <Link href="/">
+                <a className="text-white text-sm">Home</a>
+              </Link>
+              <Link href="/shop-all">
+                <a className="text-white text-sm">Products</a>
+              </Link>
+              <Link href="/about">
+                <a className="text-white text-sm">About</a>
+              </Link>
+            </div>
+          </nav>
+        )}
+        <nav className="hidden xxs:flex items-center justify-between space-x-3">
+          <Link href="/">
+            <a className="text-white text-sm">Home</a>
           </Link>
-          <Link href="/login">
-            <a>
-              <HiOutlineShoppingBag size={25} className=" cursor-pointer" />
-            </a>
+          <Link href="/shop-all">
+            <a className="text-white text-sm">Products</a>
           </Link>
-          <div onClick={() => setSearchOpen(true)}>
-            <HiOutlineSearch size={25} className=" cursor-pointer" />
-          </div>
-        </div>
-      )}
-
-      {searchOpen && (
-        <div className="absolute top-20  md:top-14 right-6 bg-yellow-600 rounded-b-md rounded-tl-md">
-          <form className="p-3" onSubmit={handleSearch}>
-            <input
-              className="text-white outline-none bg-yellow-600 placeholder-white"
-              onBlur={() => setSearchOpen(false)}
-              autoFocus
-              placeholder="Search product..."
-            />
-            <button className="hidden" type="submit">
-              Submit
+          <Link href="/about">
+            <a className="text-white text-sm">About</a>
+          </Link>
+        </nav>
+        <div className="flex text-white items-center justify-end">
+          {!authorizedCustomer ? (
+            <button className="bg-blue-600 rounded-md text-sm font-semibold p-1 mr-4">
+              <Link href="/login">
+                <a>Sign In</a>
+              </Link>
             </button>
-          </form>
+          ) : (
+            <button
+              className="bg-blue-600 rounded-md text-sm font-semibold p-1 mr-4"
+              onClick={logout as any}
+            >
+              <Link href="/">
+                <a>Logout</a>
+              </Link>
+            </button>
+          )}
+          <FiShoppingCart size={20} className="cursor-pointer" />
         </div>
-      )}
+      </div>
+
+      <div className=""></div>
     </div>
   );
 };

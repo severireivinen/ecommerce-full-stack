@@ -2,9 +2,10 @@ import React from "react";
 import useCustomerCart from "../hooks/useCustomerCart";
 import CartItem from "./CartItem";
 import OrderWrapper from "./OrderWrapper";
+import { GetServerSideProps } from "next";
 
-const CustomerCart = () => {
-  const { cart } = useCustomerCart();
+const CustomerCart = ({ setOpenCart, data }: any) => {
+  const cart = data;
 
   if (!cart) {
     return <div>Loading</div>;
@@ -24,6 +25,12 @@ const CustomerCart = () => {
       {cartIsEmpty && <OrderWrapper />}
     </div>
   );
+};
+
+export const getServerSideProps = async () => {
+  const data = useCustomerCart();
+
+  return { props: { data } };
 };
 
 export default CustomerCart;

@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
 import useLogin from "../hooks/useLogin";
-import { LoginField } from "../utils/types";
+import { LoginField } from "../lib/types";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { useApolloClient } from "@apollo/client";

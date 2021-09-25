@@ -17,7 +17,7 @@ const CartItem = ({ item }: any) => {
           <AiFillPlusCircle size={30} className="text-white" />
         </div>
       </div>
-      <p className="text-3xl text-white font-bold">{item.price} €</p>
+      <p className="text-3xl text-white font-bold">{item.price.toFixed(2)} €</p>
     </div>
   );
 };

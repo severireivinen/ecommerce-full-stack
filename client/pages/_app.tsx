@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import AuthStorage from "../lib/authStorage";
 import createApolloClient from "../lib/apollo-client";
-import AuthStorageContext from "../utils/AuthStorageContext";
+import AuthStorageContext from "../lib/AuthStorageContext";
 
 const authStorage = new AuthStorage();
 const apolloClient = createApolloClient(authStorage);

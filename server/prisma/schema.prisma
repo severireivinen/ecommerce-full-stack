@@ -27,7 +27,7 @@ model Customer {
 model ShoppingCartItem {
   id         String   @id @default(cuid())
   quantity   Int
-  price      Decimal  @db.Money
+  price      Decimal
   product    Product  @relation(fields: [productId], references: [id])
   productId  String
   customer   Customer @relation(fields: [customerId], references: [id])
@@ -40,7 +40,7 @@ model Product {
   id                String             @id @default(cuid())
   name              String
   description       String
-  price             Decimal            @db.Money
+  price             Decimal
   stock             Int
   location          String             @unique
   productCategory   ProductCategory?   @relation(fields: [productCategoryId], references: [id])
@@ -69,7 +69,7 @@ model Order {
 model OrderItem {
   id        String  @id @default(cuid())
   quantity  Int
-  price     Decimal @db.Money
+  price     Decimal
   order     Order   @relation(fields: [orderId], references: [id])
   orderId   String
   product   Product @relation(fields: [productId], references: [id])

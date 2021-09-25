@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { REGISTER } from "../graphql/mutations";
-import { InputField } from "../utils/types";
+import { InputField } from "../lib/types";
 
 const useRegister = () => {
   const [mutate, result] = useMutation(REGISTER);
