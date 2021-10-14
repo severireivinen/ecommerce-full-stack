@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
-import React from "react";
+import ProductList from "../components/ProductList";
 import Layout from "../layout/Layout";
 
 const ShopAll: NextPage = () => {
   return (
     <Layout>
-      <div>Shop-all page</div>
+      <ProductList />
     </Layout>
   );
 };

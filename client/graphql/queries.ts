@@ -11,7 +11,7 @@ export const ALL_PRODUCTS = gql`
 `;
 
 export const SINGLE_PRODUCT = gql`
-  query singleProduct($id: any) {
+  query singleProduct($id: String!) {
     singleProduct(id: $id) {
       ...ProductDetails
     }

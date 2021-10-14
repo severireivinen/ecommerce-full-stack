@@ -66,11 +66,13 @@ const Header = () => {
               </Link>
             </button>
           )}
-          <FiShoppingCart size={20} className="cursor-pointer" />
+          <Link href="/cart">
+            <a>
+              <FiShoppingCart size={20} className="cursor-pointer" />
+            </a>
+          </Link>
         </div>
       </div>
-
-      <div className=""></div>
     </div>
   );
 };

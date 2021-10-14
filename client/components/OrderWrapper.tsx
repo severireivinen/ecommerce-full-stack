@@ -19,7 +19,7 @@ const OrderWrapper = () => {
   const handleOrder = () => {
     console.log("Order created");
     createOrder();
-    router.push("/thankyou");
+    router.push("/thank-you");
   };
 
   return (

@@ -11,10 +11,6 @@ const ProductList = () => {
     return <div>Loading</div>;
   }
 
-  if (!authorizedCustomer) {
-    return <div></div>;
-  }
-
   return (
     <div className="flex flex-col items-center p-10  h-screen">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">

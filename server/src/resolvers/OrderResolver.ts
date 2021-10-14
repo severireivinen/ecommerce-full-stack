@@ -55,7 +55,7 @@ export class OrderResolver {
     const newOrder = await ctx.prisma.order.create({
       data: {
         customerId: customer.id,
-        orderStatusCodeId: "cktx3smn00000h8vgpj6pfsjd",
+        orderStatusCodeId: "f0a7dfb3-ff48-4e9c-b0a5-ccada90b7fb9",
       },
     });
 

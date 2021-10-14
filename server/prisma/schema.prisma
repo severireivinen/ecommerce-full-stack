@@ -11,7 +11,7 @@ generator client {
 }
 
 model Customer {
-  id                String             @id @default(cuid())
+  id                String             @id @default(uuid())
   email             String             @unique
   password          String
   firstName         String
@@ -23,9 +23,8 @@ model Customer {
   orders            Order[]
 }
 
-// customerId and productId switched to unique
 model ShoppingCartItem {
-  id         String   @id @default(cuid())
+  id         String   @id @default(uuid())
   quantity   Int
   price      Decimal
   product    Product  @relation(fields: [productId], references: [id])
@@ -37,7 +36,7 @@ model ShoppingCartItem {
 }
 
 model Product {
-  id                String             @id @default(cuid())
+  id                String             @id @default(uuid())
   name              String
   description       String
   price             Decimal
@@ -50,24 +49,25 @@ model Product {
 }
 
 model ProductCategory {
-  id          String    @id @default(cuid())
+  id          String    @id @default(uuid())
   name        String
   description String
   products    Product[]
 }
 
 model Order {
-  id                String           @id @default(cuid())
+  id                String           @id @default(uuid())
   customer          Customer         @relation(fields: [customerId], references: [id])
   customerId        String
   orderItems        OrderItem[]
   orderStatusCode   OrderStatusCode? @relation(fields: [orderStatusCodeId], references: [id])
   orderStatusCodeId String
+  orderedAt         DateTime         @default(now())
   shipments         Shipment[]
 }
 
 model OrderItem {
-  id        String  @id @default(cuid())
+  id        String  @id @default(uuid())
   quantity  Int
   price     Decimal
   order     Order   @relation(fields: [orderId], references: [id])
@@ -77,14 +77,14 @@ model OrderItem {
 }
 
 model OrderStatusCode {
-  id          String  @id @default(cuid())
+  id          String  @id @default(uuid())
   processed   Boolean @unique @default(false)
   description String
   orders      Order[]
 }
 
 model Shipment {
-  id         String   @id @default(cuid())
+  id         String   @id @default(uuid())
   toAdress   String
   trackingNo String
   sentAt     DateTime
