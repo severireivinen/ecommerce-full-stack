@@ -10,7 +10,7 @@ import {
   Resolver,
 } from "type-graphql";
 import argon2 from "argon2";
-import { AuthenticationError } from "apollo-server-errors";
+import { AuthenticationError } from "apollo-server-express";
 import { Context } from "../context";
 import { ShoppingCartItem } from "../entities/ShoppingCartItem";
 import signJwt from "../utils/signJwt";
@@ -32,6 +32,15 @@ class UserRegisterInput {
 
   @Field()
   lastName: string;
+
+  @Field()
+  address: string;
+
+  @Field()
+  city: string;
+
+  @Field()
+  postal: string;
 }
 
 @ObjectType()
@@ -44,7 +53,7 @@ class LoginResponse {
 export class CustomerResolver {
   @Query(() => [Customer])
   async allCustomers(@Ctx() ctx: Context): Promise<Customer[]> {
-    return await ctx.prisma.customer.findMany({});
+    return await ctx.prisma.customer.findMany({ include: { address: true } });
   }
 
   @Query(() => Customer)
@@ -59,6 +68,7 @@ export class CustomerResolver {
 
     const tokenFound = await ctx.prisma.customer.findUnique({
       where: { accessToken: token },
+      include: { address: true },
     });
 
     if (!tokenFound) {
@@ -134,9 +144,19 @@ export class CustomerResolver {
     });
 
     let customer = null;
+    let address = null;
 
     if (!alreadyExist) {
       const hashedPassword = await argon2.hash(data.password);
+
+      address = await ctx.prisma.address.create({
+        data: {
+          address: data.address,
+          city: data.city,
+          postal: data.postal,
+        },
+      });
+
       customer = await ctx.prisma.customer.create({
         data: {
           email: data.email,
@@ -144,10 +164,20 @@ export class CustomerResolver {
           phone: data.phone,
           firstName: data.firstName,
           lastName: data.lastName,
+          addressId: address.id,
         },
       });
     }
-    return customer;
+
+    if (customer === null) {
+      throw new Error("User already exists");
+    }
+
+    const returnCustomer = await ctx.prisma.customer.findUnique({
+      where: { email: customer.email },
+      include: { address: true },
+    });
+    return returnCustomer;
   }
 
   @Mutation(() => LoginResponse)

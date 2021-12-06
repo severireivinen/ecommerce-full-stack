@@ -8,6 +8,9 @@ export const REGISTER = gql`
     $firstName: String!
     $lastName: String!
     $phone: String!
+    $address: String!
+    $city: String!
+    $postal: String!
   ) {
     register(
       data: {
@@ -16,6 +19,9 @@ export const REGISTER = gql`
         firstName: $firstName
         lastName: $lastName
         phone: $phone
+        address: $address
+        city: $city
+        postal: $postal
       }
     ) {
       id

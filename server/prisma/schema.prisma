@@ -21,6 +21,17 @@ model Customer {
   accessToken       String?            @unique
   shoppingCartItems ShoppingCartItem[]
   orders            Order[]
+  address           Address?           @relation(fields: [addressId], references: [id])
+  addressId         String?            @unique
+}
+
+model Address {
+  id       String    @id @default(uuid())
+  address  String
+  city     String
+  postal   String
+  customer Customer?
+
 }
 
 model ShoppingCartItem {

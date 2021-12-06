@@ -10,10 +10,28 @@ const RegisterForm = () => {
   const router = useRouter();
 
   const onSubmit = async (values: InputField) => {
-    const { email, password, firstName, lastName, phone } = values;
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      phone,
+      address,
+      city,
+      postal,
+    } = values;
 
     try {
-      await register({ email, password, firstName, lastName, phone });
+      await register({
+        email,
+        password,
+        firstName,
+        lastName,
+        phone,
+        address,
+        city,
+        postal,
+      });
       router.push("/");
     } catch (e) {
       alert("Email already exists");
@@ -35,6 +53,9 @@ const RegisterForm = () => {
           phone: "",
           firstName: "",
           lastName: "",
+          address: "",
+          city: "",
+          postal: "",
         }}
         validationSchema={Yup.object({
           email: Yup.string()
@@ -57,6 +78,16 @@ const RegisterForm = () => {
           lastName: Yup.string()
             .max(20, "Must be 20 characters or less")
             .required("Last name is required"),
+          address: Yup.string()
+            .max(40, "Must be 40 characters or less")
+            .required("Address is required"),
+          city: Yup.string()
+            .max(30, "Must be 30 characters or less")
+            .required("City is required"),
+          postal: Yup.string()
+            .min(5, "Invalid postal code")
+            .required("Postal code is required")
+            .matches(/^[0-9]*$/),
         })}
         onSubmit={onSubmit}
       >
@@ -123,6 +154,37 @@ const RegisterForm = () => {
                 />
               </div>
               <ErrorMessage name="phone" />
+
+              <div className="border rounded-sm">
+                <Field
+                  className="p-1 bg-gray-50 text-sm w-full outline-none"
+                  name="address"
+                  type="text"
+                  placeholder="Address"
+                />
+              </div>
+              <ErrorMessage name="address" />
+
+              <div className="border rounded-sm">
+                <Field
+                  className="p-1 bg-gray-50 text-sm w-full outline-none"
+                  name="city"
+                  type="text"
+                  placeholder="City"
+                />
+              </div>
+              <ErrorMessage name="city" />
+
+              <div className="border rounded-sm">
+                <Field
+                  className="p-1 bg-gray-50 text-sm w-full outline-none"
+                  name="postal"
+                  type="text"
+                  placeholder="Postal code"
+                />
+              </div>
+              <ErrorMessage name="postal" />
+
               <div className="bg-black mx-10 text-center text-white text-md rounded-md">
                 <button className="font-semibold p-2" type="submit">
                   Register

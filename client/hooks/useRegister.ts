@@ -11,9 +11,21 @@ const useRegister = () => {
     firstName,
     lastName,
     phone,
+    address,
+    city,
+    postal,
   }: InputField) => {
     await mutate({
-      variables: { email, password, firstName, lastName, phone },
+      variables: {
+        email,
+        password,
+        firstName,
+        lastName,
+        phone,
+        address,
+        city,
+        postal,
+      },
     });
   };
   return [register, result];

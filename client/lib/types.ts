@@ -4,6 +4,9 @@ export interface InputField {
   firstName: string;
   lastName: string;
   phone: string;
+  address: string;
+  city: string;
+  postal: string;
 }
 
 export interface LoginField {
